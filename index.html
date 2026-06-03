@@ -10,70 +10,106 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@700;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Noto Sans JP',sans-serif;background:#f5f0e8;color:#2c2c2c;min-height:100vh;overflow-x:hidden}
+body{
+  font-family:'Noto Sans JP',sans-serif;
+  color:#e8e2d5;
+  min-height:100vh;
+  overflow-x:hidden;
+  background:url('dojo-night.png') center center / cover no-repeat fixed,#0b0f1a;
+  position:relative;
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:-1;
+  background:rgba(11,15,26,0.45);
+}
 .container{max-width:640px;margin:0 auto;padding:16px}
-h1{font-family:'Noto Serif JP',serif;text-align:center;color:#8b2500;font-size:1.6rem;margin-bottom:4px;line-height:1.3}
-h1 span{display:block;font-size:.85rem;color:#1a3a5c;margin-top:4px;font-family:'Noto Sans JP',sans-serif;font-weight:400}
+h1{font-family:'Noto Serif JP',serif;text-align:center;color:#f0e6d2;font-size:1.6rem;margin-bottom:4px;line-height:1.3;text-shadow:0 2px 12px rgba(200,48,46,.6),0 0 4px rgba(0,0,0,.8)}
+h1 span{display:block;font-size:.85rem;color:#c9b88f;margin-top:6px;font-family:'Noto Sans JP',sans-serif;font-weight:400;text-shadow:0 1px 4px rgba(0,0,0,.8)}
 .section{display:none;animation:fadeIn .5s}
 .section.active{display:block}
 @keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.card{background:#fffbf5;border:1px solid #c4b08b;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-.card h2{font-family:'Noto Serif JP',serif;color:#8b2500;font-size:1.15rem;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #c4b08b}
+.card{
+  background:rgba(15,20,34,0.82);
+  border:1px solid rgba(196,176,139,0.35);
+  border-radius:12px;padding:20px;margin-bottom:16px;
+  box-shadow:0 4px 20px rgba(0,0,0,.5);
+  backdrop-filter:blur(2px);
+}
+.card h2{font-family:'Noto Serif JP',serif;color:#f0e6d2;font-size:1.15rem;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid rgba(200,48,46,.55)}
 .div-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
-.div-card{background:#fffbf5;border:2px solid #c4b08b;border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:.3s}
-.div-card:hover{border-color:#8b2500;transform:translateY(-2px);box-shadow:0 4px 12px rgba(139,37,0,.15)}
-.div-card.selected{border-color:#8b2500;background:linear-gradient(135deg,#fdf6ec,#f8ece0)}
-.div-card .div-label{font-family:'Noto Serif JP',serif;font-size:1.1rem;color:#8b2500;font-weight:700}
-.div-card .div-sub{font-size:.8rem;color:#666;margin-top:4px}
-.btn-primary{display:block;width:100%;padding:14px;background:linear-gradient(135deg,#8b2500,#a83210);color:#fff;border:none;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:16px;transition:.3s;font-family:'Noto Sans JP',sans-serif}
-.btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(139,37,0,.3)}
-.btn-primary:disabled{opacity:.5;cursor:default;transform:none;box-shadow:none}
+.div-card{
+  background:rgba(25,30,46,0.75);
+  border:2px solid rgba(196,176,139,0.35);
+  border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:.3s
+}
+.div-card:hover{border-color:#c8302e;transform:translateY(-2px);box-shadow:0 4px 16px rgba(200,48,46,.35)}
+.div-card.selected{border-color:#c8302e;background:linear-gradient(135deg,rgba(200,48,46,.25),rgba(25,30,46,.85));box-shadow:0 0 14px rgba(200,48,46,.45)}
+.div-card .div-label{font-family:'Noto Serif JP',serif;font-size:1.1rem;color:#f0e6d2;font-weight:700}
+.div-card .div-sub{font-size:.8rem;color:#a99b78;margin-top:4px}
+.btn-primary{
+  display:block;width:100%;padding:14px;
+  background:linear-gradient(135deg,#c8302e,#8b1f1d);
+  color:#fff;border:none;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:16px;transition:.3s;font-family:'Noto Sans JP',sans-serif;
+  box-shadow:0 2px 12px rgba(200,48,46,.4)
+}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 18px rgba(200,48,46,.6)}
+.btn-primary:disabled{opacity:.45;cursor:default;transform:none;box-shadow:none}
 .form-group{margin-bottom:14px}
-.form-group label{display:block;font-weight:700;margin-bottom:6px;color:#1a3a5c;font-size:.9rem}
-.form-group select,.form-group input{width:100%;padding:10px;border:1px solid #c4b08b;border-radius:8px;background:#fffbf5;font-size:.95rem;color:#2c2c2c;font-family:'Noto Sans JP',sans-serif}
-.progress-wrap{background:#e8e0d0;border-radius:8px;height:8px;margin-bottom:16px;overflow:hidden}
-.progress-bar{height:100%;background:linear-gradient(90deg,#8b2500,#c4883c);border-radius:8px;transition:width .4s}
-.q-cat{font-size:.8rem;color:#8b2500;font-weight:700;margin-bottom:4px}
-.q-num{font-size:.75rem;color:#999;margin-bottom:8px}
-.q-text{font-size:1.05rem;font-weight:700;margin-bottom:16px;line-height:1.5;color:#2c2c2c}
-.btn-choice{display:block;width:100%;padding:12px 16px;margin-bottom:10px;background:#fffbf5;border:2px solid #c4b08b;border-radius:8px;text-align:left;font-size:.95rem;cursor:pointer;color:#2c2c2c;font-family:'Noto Sans JP',sans-serif;-webkit-appearance:none;appearance:none;outline:none;-webkit-tap-highlight-color:transparent;transition:none}
-@media(hover:hover){.btn-choice:hover{border-color:#8b2500;background:#fdf6ec}}
+.form-group label{display:block;font-weight:700;margin-bottom:6px;color:#c9b88f;font-size:.9rem}
+.form-group select,.form-group input{
+  width:100%;padding:10px;border:1px solid rgba(196,176,139,0.4);border-radius:8px;
+  background:rgba(25,30,46,0.9);font-size:.95rem;color:#e8e2d5;font-family:'Noto Sans JP',sans-serif
+}
+.form-group select option{background:#191e2e;color:#e8e2d5}
+.progress-wrap{background:rgba(40,46,64,0.8);border-radius:8px;height:8px;margin-bottom:16px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,#c8302e,#e8b72e);border-radius:8px;transition:width .4s}
+.q-cat{font-size:.8rem;color:#e8b72e;font-weight:700;margin-bottom:4px;letter-spacing:1px}
+.q-num{font-size:.75rem;color:#8a8068;margin-bottom:8px}
+.q-text{font-size:1.05rem;font-weight:700;margin-bottom:16px;line-height:1.5;color:#f0e6d2}
+.btn-choice{
+  display:block;width:100%;padding:12px 16px;margin-bottom:10px;
+  background:rgba(25,30,46,0.78);
+  border:2px solid rgba(196,176,139,0.35);
+  border-radius:8px;text-align:left;font-size:.95rem;cursor:pointer;color:#e8e2d5;font-family:'Noto Sans JP',sans-serif;-webkit-appearance:none;appearance:none;outline:none;-webkit-tap-highlight-color:transparent;transition:none
+}
+@media(hover:hover){.btn-choice:hover{border-color:#c8302e;background:rgba(200,48,46,.18)}}
 .btn-choice:focus{outline:none}
 .btn-choice:active{outline:none}
-.btn-choice.chosen{border-color:#8b2500;background:linear-gradient(135deg,#fdf6ec,#f8ece0);color:#8b2500;font-weight:700;pointer-events:none}
-.btn-choice.not-chosen{opacity:.4;pointer-events:none}
-.type-badge{display:inline-block;background:linear-gradient(135deg,#8b2500,#a83210);color:#fff;font-family:'Noto Serif JP',serif;font-size:1.5rem;padding:8px 20px;border-radius:8px;margin-bottom:8px;letter-spacing:2px}
-.type-title{font-family:'Noto Serif JP',serif;color:#8b2500;font-size:1.3rem;margin-bottom:8px}
-.type-desc{font-size:.92rem;line-height:1.7;color:#444;margin-bottom:16px}
+.btn-choice.chosen{border-color:#c8302e;background:linear-gradient(135deg,rgba(200,48,46,.3),rgba(25,30,46,.85));color:#fff;font-weight:700;pointer-events:none;box-shadow:0 0 12px rgba(200,48,46,.4)}
+.btn-choice.not-chosen{opacity:.35;pointer-events:none}
+.type-badge{display:inline-block;background:linear-gradient(135deg,#c8302e,#8b1f1d);color:#fff;font-family:'Noto Serif JP',serif;font-size:1.5rem;padding:8px 20px;border-radius:8px;margin-bottom:8px;letter-spacing:2px;box-shadow:0 0 16px rgba(200,48,46,.5)}
+.type-title{font-family:'Noto Serif JP',serif;color:#f0e6d2;font-size:1.3rem;margin-bottom:8px}
+.type-desc{font-size:.92rem;line-height:1.7;color:#cfc6b2;margin-bottom:16px}
 .axis-row{display:flex;align-items:center;margin-bottom:8px}
-.axis-label{width:90px;font-size:.8rem;font-weight:700;color:#1a3a5c;text-align:right;padding-right:8px;flex-shrink:0}
-.axis-track{flex:1;background:#e8e0d0;border-radius:6px;height:14px;overflow:hidden;position:relative}
+.axis-label{width:90px;font-size:.8rem;font-weight:700;color:#c9b88f;text-align:right;padding-right:8px;flex-shrink:0}
+.axis-track{flex:1;background:rgba(40,46,64,0.85);border-radius:6px;height:14px;overflow:hidden;position:relative}
 .axis-fill{height:100%;border-radius:6px;transition:width 1s ease}
-.axis-val{width:36px;font-size:.78rem;font-weight:700;text-align:left;padding-left:6px;color:#2c2c2c}
+.axis-val{width:36px;font-size:.78rem;font-weight:700;text-align:left;padding-left:6px;color:#e8e2d5}
 .chart-wrap{max-width:360px;margin:16px auto;position:relative}
 .compat-panel{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
-.compat-card{flex:1;min-width:200px;background:#fffbf5;border:1px solid #c4b08b;border-radius:8px;padding:12px}
+.compat-card{flex:1;min-width:200px;background:rgba(25,30,46,0.78);border:1px solid rgba(196,176,139,0.35);border-radius:8px;padding:12px}
 .compat-card h4{font-size:.85rem;margin-bottom:6px}
-.compat-good h4{color:#2e7d32}
-.compat-bad h4{color:#c62828}
-.compat-card .compat-code{font-family:'Noto Serif JP',serif;font-size:1.05rem;color:#8b2500;font-weight:700}
-.compat-card .compat-reason{font-size:.8rem;color:#555;margin-top:4px;line-height:1.4}
+.compat-good h4{color:#4ec27a}
+.compat-bad h4{color:#e8554e}
+.compat-card .compat-code{font-family:'Noto Serif JP',serif;font-size:1.05rem;color:#e8b72e;font-weight:700}
+.compat-card .compat-reason{font-size:.8rem;color:#b3aa94;margin-top:4px;line-height:1.4}
 .share-btns{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
 .share-btns button{flex:1;min-width:120px;padding:12px;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:.9rem;font-family:'Noto Sans JP',sans-serif;transition:.2s}
-.btn-x{background:#2c2c2c;color:#fff}
+.btn-x{background:#1a1a1a;color:#fff;border:1px solid #444}
 .btn-line{background:#06c755;color:#fff}
-.btn-img{background:linear-gradient(135deg,#8b2500,#a83210);color:#fff}
+.btn-img{background:linear-gradient(135deg,#c8302e,#8b1f1d);color:#fff}
 .share-btns button:hover{opacity:.85;transform:translateY(-1px)}
 .tech-list{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
-.tech-tag{background:#fdf6ec;border:1px solid #c4b08b;border-radius:6px;padding:8px 10px;font-size:.85rem;text-align:center;color:#2c2c2c}
-.advice-box{background:#fdf6ec;border-left:4px solid #8b2500;border-radius:0 8px 8px 0;padding:14px;margin-top:12px;font-size:.9rem;line-height:1.7;color:#444}
-.footer-mark{text-align:center;color:#c4b08b;font-size:.85rem;margin-top:24px;padding:16px 0;font-family:'Noto Serif JP',serif;letter-spacing:4px}
-#share-card{position:absolute;left:-9999px;top:0;width:600px;padding:30px;background:linear-gradient(135deg,#f5f0e8,#fffbf5);font-family:'Noto Sans JP',sans-serif}
-#share-card .sc-title{font-family:'Noto Serif JP',serif;font-size:1.1rem;color:#8b2500;text-align:center;margin-bottom:6px}
-#share-card .sc-type{font-family:'Noto Serif JP',serif;font-size:2rem;color:#8b2500;text-align:center;font-weight:900;letter-spacing:3px}
-#share-card .sc-sub{text-align:center;font-size:1rem;color:#1a3a5c;margin-bottom:12px}
+.tech-tag{background:rgba(25,30,46,0.78);border:1px solid rgba(196,176,139,0.35);border-radius:6px;padding:8px 10px;font-size:.85rem;text-align:center;color:#e8e2d5}
+.advice-box{background:rgba(200,48,46,0.12);border-left:4px solid #c8302e;border-radius:0 8px 8px 0;padding:14px;margin-top:12px;font-size:.9rem;line-height:1.7;color:#cfc6b2}
+.advice-box strong{color:#f0e6d2}
+.footer-mark{text-align:center;color:#c9b88f;font-size:.85rem;margin-top:24px;padding:16px 0;font-family:'Noto Serif JP',serif;letter-spacing:4px;text-shadow:0 1px 6px rgba(0,0,0,.7)}
+#share-card{position:absolute;left:-9999px;top:0;width:600px;padding:30px;background:linear-gradient(135deg,#0b0f1a,#191e2e);font-family:'Noto Sans JP',sans-serif}
+#share-card .sc-title{font-family:'Noto Serif JP',serif;font-size:1.1rem;color:#e8b72e;text-align:center;margin-bottom:6px}
+#share-card .sc-type{font-family:'Noto Serif JP',serif;font-size:2rem;color:#f0e6d2;text-align:center;font-weight:900;letter-spacing:3px}
+#share-card .sc-sub{text-align:center;font-size:1rem;color:#c9b88f;margin-bottom:12px}
 #share-card .sc-chart{width:300px;margin:0 auto}
-#share-card .sc-footer{text-align:center;font-size:.75rem;color:#999;margin-top:10px}
+#share-card .sc-footer{text-align:center;font-size:.75rem;color:#8a8068;margin-top:10px}
 </style>
 </head>
 <body>
@@ -340,7 +376,7 @@ var compatData={
   CSTF:{good:'APID',goodR:'最強の矛と盾のマッチアップ',bad:'ASTF',badR:'冷徹快速型に速度で上回られると苦戦'}
 };
 
-var paramColors=['#8b2500','#c4883c','#2e7d32','#1a3a5c','#c4b08b','#6a1b9a','#00695c','#d84315'];
+var paramColors=['#c8302e','#e8b72e','#4ec27a','#5b8fd6','#c9b88f','#9a6fc0','#3fb8a8','#e07a3c'];
 var paramNames=['破壊力','瞬発力','技術力','防御力','スタミナ','精神力','リーチ','技の多彩さ'];
 var paramNamesElem=['パワー','スピード','テクニック','ガードりょく','スタミナ','メンタル','リーチ','わざの多さ'];
 
@@ -495,20 +531,20 @@ function showResult(){
   if(myChart){myChart.destroy()}
   myChart=new Chart(document.getElementById('radarCanvas').getContext('2d'),{
     type:'radar',
-    data:{labels:pNames,datasets:[{label:code,data:params,backgroundColor:'rgba(139,37,0,.15)',borderColor:'#8b2500',borderWidth:2,pointBackgroundColor:'#8b2500',pointRadius:3}]},
-    options:{scales:{r:{min:0,max:100,ticks:{stepSize:20,font:{size:10},backdropColor:'transparent'},grid:{color:'#c4b08b55'},pointLabels:{font:{size:11,family:'Noto Sans JP'},color:'#2c2c2c'}}},plugins:{legend:{display:false}},animation:{duration:1200}}
+    data:{labels:pNames,datasets:[{label:code,data:params,backgroundColor:'rgba(200,48,46,.2)',borderColor:'#c8302e',borderWidth:2,pointBackgroundColor:'#e8b72e',pointRadius:3}]},
+    options:{scales:{r:{min:0,max:100,ticks:{stepSize:20,font:{size:10},color:'#a99b78',backdropColor:'transparent'},grid:{color:'rgba(196,176,139,.25)'},angleLines:{color:'rgba(196,176,139,.25)'},pointLabels:{font:{size:11,family:'Noto Sans JP'},color:'#e8e2d5'}}},plugins:{legend:{display:false}},animation:{duration:1200}}
   });
 
   var comp=compatData[code];
   var goodTd=isE?elemTypeData[comp.good]:typeData[comp.good];
   var badTd=isE?elemTypeData[comp.bad]:typeData[comp.bad];
   document.getElementById('result-compat').innerHTML='<h2>'+(isE?'あいしょうチェック！':'タイプ相性')+'</h2>'
-    +'<p style="font-size:.85rem;color:#666;margin-bottom:10px">'+(isE?'きみのタイプとあいしょうのいいタイプ・にがてなタイプだよ！':'あなたのタイプとの相性を確認しよう')+'</p>'
+    +'<p style="font-size:.85rem;color:#a99b78;margin-bottom:10px">'+(isE?'きみのタイプとあいしょうのいいタイプ・にがてなタイプだよ！':'あなたのタイプとの相性を確認しよう')+'</p>'
     +'<div class="compat-panel">'
-    +'<div class="compat-card compat-good"><h4>'+(isE?'🤝 あいしょう◎':'🤝 好相性')+'</h4><div class="compat-code">'+comp.good+'</div><div style="font-size:.85rem;color:#8b2500">'+goodTd.title+'</div><div class="compat-reason">'+comp.goodR+'</div></div>'
-    +'<div class="compat-card compat-bad"><h4>'+(isE?'⚡ にがて…':'⚡ 苦手タイプ')+'</h4><div class="compat-code">'+comp.bad+'</div><div style="font-size:.85rem;color:#8b2500">'+badTd.title+'</div><div class="compat-reason">'+comp.badR+'</div></div>'
+    +'<div class="compat-card compat-good"><h4>'+(isE?'🤝 あいしょう◎':'🤝 好相性')+'</h4><div class="compat-code">'+comp.good+'</div><div style="font-size:.85rem;color:#c9b88f">'+goodTd.title+'</div><div class="compat-reason">'+comp.goodR+'</div></div>'
+    +'<div class="compat-card compat-bad"><h4>'+(isE?'⚡ にがて…':'⚡ 苦手タイプ')+'</h4><div class="compat-code">'+comp.bad+'</div><div style="font-size:.85rem;color:#c9b88f">'+badTd.title+'</div><div class="compat-reason">'+comp.badR+'</div></div>'
     +'</div>'
-    +'<p style="font-size:.82rem;color:#888;margin-top:10px;text-align:center">'+(isE?'ともだちやどうじょうのなかまにもやってもらおう！':'道場仲間にも診断してもらって相性をチェック！')+'</p>';
+    +'<p style="font-size:.82rem;color:#8a8068;margin-top:10px;text-align:center">'+(isE?'ともだちやどうじょうのなかまにもやってもらおう！':'道場仲間にも診断してもらって相性をチェック！')+'</p>';
 
   var techScores=TECHNIQUES.map(function(t){
     var sc=0;var keys=Object.keys(t.factors);
@@ -543,24 +579,15 @@ function showResult(){
   }
   document.getElementById('result-advice').innerHTML='<div class="advice-box">'+adv+'</div>';
 
-  /* ===== ★ シェア修正箇所 ===== */
   var siteURL='https://shindan16.github.io';
-
-  /* X（Twitter）用：本文とURLを分離して渡す */
   var xText='【極真空手16タイプ診断】\n結果: '+code+'「'+td.title+'」\n'+pNames.map(function(n,i){return n+':'+params[i]}).join(' / ')+'\n\nあなたも診断してみよう！';
-
   document.getElementById('btn-share-x').onclick=function(){
     window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(xText)+'&url='+encodeURIComponent(siteURL),'_blank');
   };
-
-  /* ★ LINE用：公式URL scheme https://line.me/R/share?text={text} を使用 */
   var lineText='【極真空手16タイプ診断】\n結果: '+code+'「'+td.title+'」\n'+pNames.map(function(n,i){return n+':'+params[i]}).join(' / ')+'\n\nあなたも診断してみよう！\n'+siteURL;
-
   document.getElementById('btn-share-line').onclick=function(){
     window.open('https://line.me/R/share?text='+encodeURIComponent(lineText),'_blank');
   };
-
-  /* 画像シェア用テキスト */
   var imgShareText=lineText;
 
   document.getElementById('sc-type-code').textContent=code;
@@ -569,15 +596,15 @@ function showResult(){
   if(shareChart){shareChart.destroy()}
   shareChart=new Chart(document.getElementById('shareRadar').getContext('2d'),{
     type:'radar',
-    data:{labels:pNames,datasets:[{data:params,backgroundColor:'rgba(139,37,0,.15)',borderColor:'#8b2500',borderWidth:2,pointBackgroundColor:'#8b2500',pointRadius:3}]},
-    options:{scales:{r:{min:0,max:100,ticks:{stepSize:20,font:{size:9},backdropColor:'transparent'},grid:{color:'#c4b08b55'},pointLabels:{font:{size:10},color:'#2c2c2c'}}},plugins:{legend:{display:false}},animation:{duration:0}}
+    data:{labels:pNames,datasets:[{data:params,backgroundColor:'rgba(200,48,46,.2)',borderColor:'#c8302e',borderWidth:2,pointBackgroundColor:'#e8b72e',pointRadius:3}]},
+    options:{scales:{r:{min:0,max:100,ticks:{stepSize:20,font:{size:9},color:'#a99b78',backdropColor:'transparent'},grid:{color:'rgba(196,176,139,.25)'},angleLines:{color:'rgba(196,176,139,.25)'},pointLabels:{font:{size:10},color:'#e8e2d5'}}},plugins:{legend:{display:false}},animation:{duration:0}}
   });
 
   document.getElementById('btn-share-img').onclick=function(){
     var btn=this;
     btn.textContent='生成中...';btn.disabled=true;
     setTimeout(function(){
-      html2canvas(document.getElementById('share-card'),{scale:2,backgroundColor:'#f5f0e8',useCORS:true}).then(function(canvas){
+      html2canvas(document.getElementById('share-card'),{scale:2,backgroundColor:'#0b0f1a',useCORS:true}).then(function(canvas){
         if(navigator.share&&navigator.canShare){
           canvas.toBlob(function(blob){
             var file=new File([blob],'karate-type.png',{type:'image/png'});
