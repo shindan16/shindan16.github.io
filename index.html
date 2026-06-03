@@ -520,10 +520,17 @@ function buildPixelBar(value,color){
 
 function showResult(){
   var isE=(selectedDiv==='elem');
-  var c1=scores.A>=scores.C?'A':'C';
-  var c2=scores.P>=scores.S?'P':'S';
-  var c3=scores.I>=scores.T?'I':'T';
-  var c4=scores.D>=scores.F?'D':'F';
+    // 軸判定：ほぼ互角のときに片方へ固まらないよう、わずかなランダムのゆらぎを加える。
+  // 差がはっきりしている人は結果が変わらない（ゆらぎより差のほうが大きいため）。
+  function pick(s1,s2,ch1,ch2){
+    var diff=s1-s2;                 // プラスならch1寄り、マイナスならch2寄り
+    var jitter=(Math.random()-0.5)*1.5; // -0.75〜+0.75 のゆらぎ
+    return (diff+jitter)>=0 ? ch1 : ch2;
+  }
+  var c1=pick(scores.A,scores.C,'A','C');
+  var c2=pick(scores.P,scores.S,'P','S');
+  var c3=pick(scores.I,scores.T,'I','T');
+  var c4=pick(scores.D,scores.F,'D','F');
   var code=c1+c2+c3+c4;
   var td=isE?elemTypeData[code]:typeData[code];
   var aura=auraColor(code);
