@@ -528,22 +528,58 @@ function showResult(){
   var td=isE?elemTypeData[code]:typeData[code];
   var aura=auraColor(code);
 
+  // ===== 軸の比率（0〜1）=====
+  // rAC: 1に近い=攻撃的 / rPS: 1に近い=パワー
+  // rIT: 1に近い=直感 / rDF: 1に近い=精神(根性)・0に近い=戦略
   var rAC=(scores.A+1)/(scores.A+scores.C+2);
   var rPS=(scores.P+1)/(scores.P+scores.S+2);
   var rIT=(scores.I+1)/(scores.I+scores.T+2);
   var rDF=(scores.D+1)/(scores.D+scores.F+2);
-  var htN=bodyInfo.ht/4,wtN=bodyInfo.wt/4,flexN=bodyInfo.flex/3,dexN=bodyInfo.dex/3,expN=bodyInfo.exp/4;
 
-  function clamp(v){return Math.round(Math.max(5,Math.min(100,v)))}
+  // ===== 体型（0〜1に正規化）=====
+  var htN=bodyInfo.ht/4, wtN=bodyInfo.wt/4;
+  var flexN=bodyInfo.flex/3, dexN=bodyInfo.dex/3, expN=bodyInfo.exp/4;
+
+  // ===== タイプ別ボーナス =====
+  // コードの各文字を見て、関係するパラメータに固定ボーナスを足す。
+  // 順番: [破壊力, 瞬発力, 技術力, 防御力, スタミナ, 精神力, リーチ, 技の多彩さ]
+  var bonus=[0,0,0,0,0,0,0,0];
+  // 1文字目 A=攻撃 / C=カウンター
+  if(c1==='A'){ bonus[0]+=6; bonus[1]+=6; bonus[5]+=4; }      // 攻撃型: 破壊・瞬発・精神
+  else        { bonus[3]+=10; bonus[2]+=4; bonus[5]+=4; }     // カウンター型: 防御・技術・精神
+  // 2文字目 P=パワー / S=スピード
+  if(c2==='P'){ bonus[0]+=14; bonus[3]+=4; }                   // パワー型: 破壊力↑＋防御少し
+  else        { bonus[1]+=14; bonus[7]+=6; }                   // スピード型: 瞬発力↑＋技の多彩さ
+  // 3文字目 I=直感 / T=技術
+  if(c3==='I'){ bonus[5]+=8; bonus[1]+=4; }                   // 直感型: 精神・瞬発
+  else        { bonus[2]+=12; bonus[7]+=6; }                   // 技術型: 技術力↑＋多彩さ
+  // 4文字目 D=根性(精神) / F=戦略
+  if(c4==='D'){ bonus[5]+=8; bonus[4]+=6; }                   // 根性型: 精神・スタミナ
+  else        { bonus[2]+=4; bonus[6]+=4; bonus[7]+=4; }      // 戦略型: 技術・リーチ・多彩さ
+
+  // ===== ベース計算 =====
+  // 各パラメータ = ベース値 + 体型補正 + タイプボーナス + わずかな経験補正
+  // expN は全体を少しだけ底上げするだけ（最大+6）にして、差がつぶれないようにする
+  var ex=expN*6;
+  function clamp(v){return Math.round(Math.max(8,Math.min(100,v)))}
+
   var params=[
-    clamp(rPS*35+wtN*25+rAC*10+(1-rDF)*5+expN*20+5),
-    clamp((1-rPS)*30+(1-wtN)*10+rAC*15+dexN*10+expN*15+15),
-    clamp((1-rIT)*30+dexN*15+flexN*10+expN*30+10),
-    clamp((1-rAC)*25+(1-rIT)*10+rDF*5+(1-rDF)*10+expN*25+flexN*5+15),
-    clamp(wtN*10+(1-rPS)*10+rDF*10+expN*25+rAC*10+30),
-    clamp(rDF*25+rAC*15+expN*20+(1-rIT)*5+15),
-    clamp(htN*40+flexN*15+expN*10+25),
-    clamp((1-rIT)*20+dexN*20+flexN*15+expN*25+15)
+    // 破壊力: パワーと体重が主役
+    clamp(28 + rPS*22 + wtN*20 + bonus[0] + ex),
+    // 瞬発力: スピードと器用さが主役
+    clamp(30 + (1-rPS)*24 + dexN*12 + bonus[1] + ex),
+    // 技術力: 技術軸と器用さ・柔軟が主役
+    clamp(28 + (1-rIT)*22 + dexN*10 + flexN*8 + bonus[2] + ex),
+    // 防御力: カウンター志向と精神が主役
+    clamp(26 + (1-rAC)*22 + rDF*10 + bonus[3] + ex),
+    // スタミナ: 体格と根性が主役（攻撃比率はもう混ぜない）
+    clamp(32 + wtN*10 + rDF*14 + bonus[4] + ex),
+    // 精神力: 根性軸と攻撃志向が主役
+    clamp(30 + rDF*18 + rAC*10 + bonus[5] + ex),
+    // リーチ: 身長が主役
+    clamp(24 + htN*42 + bonus[6] + ex*0.5),
+    // 技の多彩さ: 技術・器用・柔軟が主役
+    clamp(28 + (1-rIT)*16 + dexN*14 + flexN*10 + bonus[7] + ex)
   ];
 
   /* キャラ画像（オーラ付き）＋バッジ＋タイトル＋説明 */
@@ -609,7 +645,7 @@ function showResult(){
   var siteURL='https://shindan16.github.io';
   var xText='【極真空手16タイプ診断】\n結果: '+code+'「'+td.title+'」\n'+pNames.map(function(n,i){return n+':'+params[i]}).join(' / ')+'\n\nあなたも診断してみよう！';
   document.getElementById('btn-share-x').onclick=function(){
-    window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(xText)+'&url='+encodeURIComponent(siteURL),'_blank');
+    window.open('https://x.com/intent/tweet?text='+encodeURIComponent(xText)+'&url='+encodeURIComponent(siteURL),'_blank');
   };
   var lineText='【極真空手16タイプ診断】\n結果: '+code+'「'+td.title+'」\n'+pNames.map(function(n,i){return n+':'+params[i]}).join(' / ')+'\n\nあなたも診断してみよう！\n'+siteURL;
   document.getElementById('btn-share-line').onclick=function(){
