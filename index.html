@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>極真空手 16タイプ診断 | 己の武道スタイルを知れ</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@700;900&display=swap" rel="stylesheet">
@@ -77,15 +76,39 @@ h1 span{display:block;font-size:.85rem;color:#c9b88f;margin-top:6px;font-family:
 .btn-choice:active{outline:none}
 .btn-choice.chosen{border-color:#c8302e;background:linear-gradient(135deg,rgba(200,48,46,.3),rgba(25,30,46,.85));color:#fff;font-weight:700;pointer-events:none;box-shadow:0 0 12px rgba(200,48,46,.4)}
 .btn-choice.not-chosen{opacity:.35;pointer-events:none}
+
+/* ===== キャラ画像 ===== */
+.char-wrap{display:flex;justify-content:center;margin-bottom:14px}
+.char-img{
+  width:200px;height:200px;object-fit:contain;border-radius:16px;
+  background:rgba(11,15,26,0.5);
+  padding:6px;
+  animation:charPop .6s ease;
+}
+@keyframes charPop{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+
 .type-badge{display:inline-block;background:linear-gradient(135deg,#c8302e,#8b1f1d);color:#fff;font-family:'Noto Serif JP',serif;font-size:1.5rem;padding:8px 20px;border-radius:8px;margin-bottom:8px;letter-spacing:2px;box-shadow:0 0 16px rgba(200,48,46,.5)}
 .type-title{font-family:'Noto Serif JP',serif;color:#f0e6d2;font-size:1.3rem;margin-bottom:8px}
-.type-desc{font-size:.92rem;line-height:1.7;color:#cfc6b2;margin-bottom:16px}
-.axis-row{display:flex;align-items:center;margin-bottom:8px}
-.axis-label{width:90px;font-size:.8rem;font-weight:700;color:#c9b88f;text-align:right;padding-right:8px;flex-shrink:0}
-.axis-track{flex:1;background:rgba(40,46,64,0.85);border-radius:6px;height:14px;overflow:hidden;position:relative}
-.axis-fill{height:100%;border-radius:6px;transition:width 1s ease}
-.axis-val{width:36px;font-size:.78rem;font-weight:700;text-align:left;padding-left:6px;color:#e8e2d5}
-.chart-wrap{max-width:360px;margin:16px auto;position:relative}
+.type-desc{font-size:.92rem;line-height:1.7;color:#cfc6b2;margin-bottom:4px}
+
+/* ===== ドット絵風パラメータバー ===== */
+.pbar-row{margin-bottom:12px}
+.pbar-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.pbar-name{font-size:.82rem;font-weight:700;color:#c9b88f}
+.pbar-val{font-size:.82rem;font-weight:700;color:#e8e2d5;font-family:'Noto Serif JP',serif}
+.pbar-track{
+  display:flex;gap:3px;
+  background:rgba(11,15,26,0.6);
+  padding:4px;border-radius:4px;
+  border:1px solid rgba(196,176,139,0.2);
+}
+.pbar-cell{
+  flex:1;height:14px;border-radius:2px;
+  background:rgba(60,66,86,0.7);
+  transition:background .25s,box-shadow .25s;
+}
+.pbar-cell.on{box-shadow:0 0 5px rgba(0,0,0,.4)}
+
 .compat-panel{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
 .compat-card{flex:1;min-width:200px;background:rgba(25,30,46,0.78);border:1px solid rgba(196,176,139,0.35);border-radius:8px;padding:12px}
 .compat-card h4{font-size:.85rem;margin-bottom:6px}
@@ -104,12 +127,6 @@ h1 span{display:block;font-size:.85rem;color:#c9b88f;margin-top:6px;font-family:
 .advice-box{background:rgba(200,48,46,0.12);border-left:4px solid #c8302e;border-radius:0 8px 8px 0;padding:14px;margin-top:12px;font-size:.9rem;line-height:1.7;color:#cfc6b2}
 .advice-box strong{color:#f0e6d2}
 .footer-mark{text-align:center;color:#c9b88f;font-size:.85rem;margin-top:24px;padding:16px 0;font-family:'Noto Serif JP',serif;letter-spacing:4px;text-shadow:0 1px 6px rgba(0,0,0,.7)}
-#share-card{position:absolute;left:-9999px;top:0;width:600px;padding:30px;background:linear-gradient(135deg,#0b0f1a,#191e2e);font-family:'Noto Sans JP',sans-serif}
-#share-card .sc-title{font-family:'Noto Serif JP',serif;font-size:1.1rem;color:#e8b72e;text-align:center;margin-bottom:6px}
-#share-card .sc-type{font-family:'Noto Serif JP',serif;font-size:2rem;color:#f0e6d2;text-align:center;font-weight:900;letter-spacing:3px}
-#share-card .sc-sub{text-align:center;font-size:1rem;color:#c9b88f;margin-bottom:12px}
-#share-card .sc-chart{width:300px;margin:0 auto}
-#share-card .sc-footer{text-align:center;font-size:.75rem;color:#8a8068;margin-top:10px}
 </style>
 </head>
 <body>
@@ -145,7 +162,6 @@ h1 span{display:block;font-size:.85rem;color:#c9b88f;margin-top:6px;font-family:
 <div class="section" id="sec-result">
 <div class="card" style="text-align:center" id="result-main"></div>
 <div class="card" id="result-params"></div>
-<div class="card"><h2 id="chart-heading">パラメータチャート</h2><div class="chart-wrap"><canvas id="radarCanvas"></canvas></div></div>
 <div class="card" id="result-compat"></div>
 <div class="card" id="result-tech"></div>
 <div class="card" id="result-advice"></div>
@@ -161,13 +177,6 @@ h1 span{display:block;font-size:.85rem;color:#c9b88f;margin-top:6px;font-family:
 <div class="footer-mark">━━ 押忍 ━━</div>
 </div>
 
-<div id="share-card">
-<div class="sc-title">極真空手 16タイプ診断</div>
-<div class="sc-type" id="sc-type-code"></div>
-<div class="sc-sub" id="sc-type-title"></div>
-<div class="sc-chart"><canvas id="shareRadar" width="300" height="300"></canvas></div>
-<div class="sc-footer">極真空手16タイプ診断であなたも診断してみよう！</div>
-</div>
 </div>
 
 <script>
@@ -178,8 +187,15 @@ var DIVISIONS=[
   {id:'adult',label:'一般部',sub:'23歳以上',color:'#e07040'}
 ];
 
+/* 系統カラー（オーラ用） */
+var seriesColor={A:'#C8302E',S:'#E8B72E',CP:'#8B5A2B',CS:'#6B4C9A'};
+function auraColor(code){
+  if(code.charAt(0)==='A'){ return code.charAt(1)==='P'?'#C8302E':'#E8B72E'; }
+  else { return code.charAt(1)==='P'?'#8B5A2B':'#6B4C9A'; }
+}
+
 var selectedDiv=null,currentQ=0,isLocked=false;
-var scores={A:0,C:0,P:0,S:0,I:0,T:0,D:0,F:0},bodyInfo={},myChart=null,shareChart=null;
+var scores={A:0,C:0,P:0,S:0,I:0,T:0,D:0,F:0},bodyInfo={};
 
 function bodyOpts(d){
   var base={
@@ -398,8 +414,6 @@ var paramNamesElem=['パワー','スピード','テクニック','ガードり�
   document.getElementById('btn-retry').addEventListener('click',function(){
     scores={A:0,C:0,P:0,S:0,I:0,T:0,D:0,F:0};
     currentQ=0;bodyInfo={};selectedDiv=null;isLocked=false;
-    if(myChart){myChart.destroy();myChart=null}
-    if(shareChart){shareChart.destroy();shareChart=null}
     grid.querySelectorAll('.div-card').forEach(function(c){c.classList.remove('selected')});
     document.getElementById('btn-div-next').disabled=true;
     show('sec-division');
@@ -488,6 +502,22 @@ function handleChoice(clickedBtn,val,axes,container){
   },400);
 }
 
+/* ドット絵風バーを作る関数（20マス） */
+function buildPixelBar(value,color){
+  var cells=20;
+  var on=Math.round(value/100*cells);
+  var html='<div class="pbar-track">';
+  for(var i=0;i<cells;i++){
+    if(i<on){
+      html+='<div class="pbar-cell on" style="background:'+color+'"></div>';
+    }else{
+      html+='<div class="pbar-cell"></div>';
+    }
+  }
+  html+='</div>';
+  return html;
+}
+
 function showResult(){
   var isE=(selectedDiv==='elem');
   var c1=scores.A>=scores.C?'A':'C';
@@ -496,6 +526,7 @@ function showResult(){
   var c4=scores.D>=scores.F?'D':'F';
   var code=c1+c2+c3+c4;
   var td=isE?elemTypeData[code]:typeData[code];
+  var aura=auraColor(code);
 
   var rAC=(scores.A+1)/(scores.A+scores.C+2);
   var rPS=(scores.P+1)/(scores.P+scores.S+2);
@@ -515,24 +546,20 @@ function showResult(){
     clamp((1-rIT)*20+dexN*20+flexN*15+expN*25+15)
   ];
 
-  document.getElementById('result-main').innerHTML='<div class="type-badge">'+code+'</div><div class="type-title">'+td.title+'</div><p class="type-desc">'+td.desc+'</p>';
+  /* キャラ画像（オーラ付き）＋バッジ＋タイトル＋説明 */
+  document.getElementById('result-main').innerHTML=
+    '<div class="char-wrap"><img class="char-img" src="'+code+'.png" alt="'+td.title+'" style="box-shadow:0 0 28px '+aura+',0 0 10px '+aura+';border:2px solid '+aura+'"></div>'
+    +'<div class="type-badge" style="background:linear-gradient(135deg,'+aura+',rgba(0,0,0,.5));box-shadow:0 0 16px '+aura+'">'+code+'</div>'
+    +'<div class="type-title">'+td.title+'</div>'
+    +'<p class="type-desc">'+td.desc+'</p>';
 
   var pNames=isE?paramNamesElem:paramNames;
   var rp=document.getElementById('result-params');
   rp.innerHTML='<h2>'+(isE?'キミのパラメータ':'パラメータ分析')+'</h2>';
   params.forEach(function(v,i){
-    var row=document.createElement('div');row.className='axis-row';
-    row.innerHTML='<div class="axis-label">'+pNames[i]+'</div><div class="axis-track"><div class="axis-fill" style="width:0%;background:'+paramColors[i]+'"></div></div><div class="axis-val">'+v+'</div>';
+    var row=document.createElement('div');row.className='pbar-row';
+    row.innerHTML='<div class="pbar-head"><span class="pbar-name">'+pNames[i]+'</span><span class="pbar-val">'+v+'</span></div>'+buildPixelBar(v,paramColors[i]);
     rp.appendChild(row);
-    setTimeout(function(){row.querySelector('.axis-fill').style.width=v+'%'},100+i*80);
-  });
-
-  document.getElementById('chart-heading').textContent='パラメータチャート';
-  if(myChart){myChart.destroy()}
-  myChart=new Chart(document.getElementById('radarCanvas').getContext('2d'),{
-    type:'radar',
-    data:{labels:pNames,datasets:[{label:code,data:params,backgroundColor:'rgba(200,48,46,.2)',borderColor:'#c8302e',borderWidth:2,pointBackgroundColor:'#e8b72e',pointRadius:3}]},
-    options:{scales:{r:{min:0,max:100,ticks:{stepSize:20,font:{size:10},color:'#a99b78',backdropColor:'transparent'},grid:{color:'rgba(196,176,139,.25)'},angleLines:{color:'rgba(196,176,139,.25)'},pointLabels:{font:{size:11,family:'Noto Sans JP'},color:'#e8e2d5'}}},plugins:{legend:{display:false}},animation:{duration:1200}}
   });
 
   var comp=compatData[code];
@@ -588,45 +615,10 @@ function showResult(){
   document.getElementById('btn-share-line').onclick=function(){
     window.open('https://line.me/R/share?text='+encodeURIComponent(lineText),'_blank');
   };
-  var imgShareText=lineText;
-
-  document.getElementById('sc-type-code').textContent=code;
-  document.getElementById('sc-type-title').textContent=td.title;
-
-  if(shareChart){shareChart.destroy()}
-  shareChart=new Chart(document.getElementById('shareRadar').getContext('2d'),{
-    type:'radar',
-    data:{labels:pNames,datasets:[{data:params,backgroundColor:'rgba(200,48,46,.2)',borderColor:'#c8302e',borderWidth:2,pointBackgroundColor:'#e8b72e',pointRadius:3}]},
-    options:{scales:{r:{min:0,max:100,ticks:{stepSize:20,font:{size:9},color:'#a99b78',backdropColor:'transparent'},grid:{color:'rgba(196,176,139,.25)'},angleLines:{color:'rgba(196,176,139,.25)'},pointLabels:{font:{size:10},color:'#e8e2d5'}}},plugins:{legend:{display:false}},animation:{duration:0}}
-  });
 
   document.getElementById('btn-share-img').onclick=function(){
-    var btn=this;
-    btn.textContent='生成中...';btn.disabled=true;
-    setTimeout(function(){
-      html2canvas(document.getElementById('share-card'),{scale:2,backgroundColor:'#0b0f1a',useCORS:true}).then(function(canvas){
-        if(navigator.share&&navigator.canShare){
-          canvas.toBlob(function(blob){
-            var file=new File([blob],'karate-type.png',{type:'image/png'});
-            if(navigator.canShare({files:[file]})){
-              navigator.share({files:[file],title:'極真空手16タイプ診断',text:imgShareText}).catch(function(){});
-            }else{dlCanvas(canvas)}
-            btn.textContent='📸 画像を保存';btn.disabled=false;
-          });
-        }else{
-          dlCanvas(canvas);
-          btn.textContent='📸 画像を保存';btn.disabled=false;
-        }
-      }).catch(function(){
-        alert('画像生成に失敗しました');
-        btn.textContent='📸 画像を保存';btn.disabled=false;
-      });
-    },500);
+    alert('画像保存機能は次のステップで縦長カードを作って実装します');
   };
-}
-
-function dlCanvas(canvas){
-  var a=document.createElement('a');a.download='karate-type.png';a.href=canvas.toDataURL('image/png');a.click();
 }
 </script>
 </body>
